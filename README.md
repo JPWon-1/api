@@ -16,7 +16,7 @@ The best place to get help is our Spectrum channel, [spectrum.chat/jseverywhere]
 
 ## To Use the Final Project Files
 
-If you're developing a UI and would like to use the completed project, copy the files to the completed files to the `src` as follows: 
+If you're developing a UI and would like to use the completed project, copy the files to the completed files to the `src` as follows:
 
 ```
 cp -rf ./final/* ./src/
@@ -51,31 +51,49 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---
+
 # JP 공부 기록용 fork repository 입니다.
+
 이렇게 기록이라도 해야..뭐라도 남을까 싶어서 fork 했습니다
 final은 최종 소스이고
 solutions 는 문제 해결에 있어 참고할 소스들이 포함되어 있다고 원작자가 말했습니다.
 
 저의 소스 커밋들은 src 에 계속 추가 될 예정입니다.
 
-# 
-*  2021-05-05 : 개발 도구 세팅 및 clone project. express 프레임워크를 이용하여 간단한 hello world를 출력하는 과정까지 해보았다. nodemon을 설치하여 코드 변경사항이 있을 경우 서버를 자동으로 재시작 해주는것도 배웠다. 
+#
 
+- 2021-05-05 : 개발 도구 세팅 및 clone project. express 프레임워크를 이용하여 간단한 hello world를 출력하는 과정까지 해보았다. nodemon을 설치하여 코드 변경사항이 있을 경우 서버를 자동으로 재시작 해주는것도 배웠다.
 
+- 2021-05-06 : apollo-server-express 모듈을 사용하여 graphQL API를 만들어 보았다.
+  note에 인자를 전달하여 부모의 note에서 원하는 값만 가져오도록 만들어 보았고
+  mutation을 만들어서 note에다가 새로운 값을 push하였고 이를 gralhQL Playground 에서 확인 한 결과 정상적으로 반영 된 것을 알 수 있었다.
 
+```jsx
+    query{
+        notes{
+            id
+            content
+            author
+        }
+    }
+```
 
+```jsx
+    query{
+        note(id:"1"){
+            id
+            content
+            author
+        }
+    }
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```jsx
+   mutation {
+        newNote (content: "this is a mutant note!"){
+        content
+        id
+        author
+  }
+}
+```
