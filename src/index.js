@@ -2,6 +2,7 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 require('dotenv').config();
 const db = require('./db');
+const models = require('./models');
 
 //.env 파일에 명시된 포트 또는 포트 4000에서 서버를 실행
 const port = process.env.PORT || 4000;
@@ -36,7 +37,9 @@ const typeDefs = gql`
 const resolvers = {
 	Query: {
 		hello: () => 'Hello world!',
-		notes: () => notes,
+		notes: async () => {
+			return await models.Note.find();
+		},
 		note: (parent, args) => {
 			return notes.find(note => note.id === args.id);
 		}
