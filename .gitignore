@@ -62,3 +62,8 @@ typings/
 
 # VSCode settings
 .vscode/
+package-lock.json
+package.json
+final/
+solutions/
+target/npmlist.json
