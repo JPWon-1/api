@@ -5,27 +5,55 @@ const {
     ForbiddenError,
     AuthenticationError
 } = require('apollo-server-express');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const gravatar = require('../util/gravatar');
-const { models } = require('mongoose');
 
 module.exports = {
-    newNote: async (parent, args, { models }) => {
+    newNote: async (parent, args, { models, user }) => {
+        //context에 user가 없으면 인증 에러 던지기
+        if (!user) {
+            throw new AuthenticationError('노트를 작성하시려면 로그인 하셔야합니다.');
+        }
         return await models.Note.create({
             content: args.content,
-            author: 'Adam Scott'
+            //author의 몽고 ID 참조
+            author: mongoose.Types.ObjectId(user.id)
         });
     },
-    deleteNote: async (parent, { id }, { models }) => {
+    deleteNote: async (parent, { id }, { models, user }) => {
+        //user가 아니면 인증 에러 던지기
+        if (!user) {
+            throw new AutehnticationError('게시글을 삭제하시려면 로그인 하셔야 합니다');
+        }
+        //note 찾기
+        const note = await models.Note.findById(id);
+        //note 소유자와 현재 사용자가 불일치하면 접근 에러 던지기
+        if (note && String(note.author) !== user.id) {
+            throw new ForbiddenError("게시글의 권한이 없습니다");
+        }
         try {
-            await models.Note.findOneAndRemove({ _id: id });
+            //문제가 없으면 note 삭제
+            await note.remove();
             return true;
         } catch (error) {
+            //오류가 있으면 false 반환
             return false;
         }
     },
-    updateNote: async (parent, { content, id }, { models }) => {
+    updateNote: async (parent, { content, id }, { models, user }) => {
+        //user가 아니면 인증 에러 던지기
+        if(!user) {
+            throw new AutehnticationError('게시글을 수정하시려면 로그인 하셔야 합니다');
+        }
+        //note 찾기
+        const note = await models.Note.findById(id);
+        //note 소유자와 현재 사용자가 불일치하면 접근 에러 던지기
+        if(note && String(note.author)!== user.id) {
+            throw new ForbiddenError("게시글의 권한이 없습니다");
+        }
+        //DB의 노트를 업데이트하고 업데이트된 노트를 반환
         return await models.Note.findOneAndUpdate(
             {
                 _id: id,
