@@ -5,8 +5,6 @@ module.exports = {
     note: async (parent, args, {models}) => {
         return await models.Note.findById(args.id);
     },
-
-    //다음을 기존 modulex.exports객체에 추가
     user: async (parent, { username }, {models})=> {
         // 주어진 username과 일치하는 사용자 찾기
         return await models.User.findOne({username});
