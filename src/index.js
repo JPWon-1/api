@@ -1,7 +1,11 @@
+const cors = require('cors');
+const helmet = require('helmet');
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 require('dotenv').config();
 
+const depthLimit = require('graphql-depth-limit');
+const { createComplexityLimitRule } = require('graphql-validation-complexity');
 //로컬 모듈 임포트
 const db = require('./db');
 const models = require('./models');
@@ -15,6 +19,8 @@ const port = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
 
 const app = express();
+app.use(helmet());
+app.use(cors());
 //DB에 연결
 db.connect(DB_HOST);
 
@@ -35,14 +41,13 @@ const getUser = token => {
 const server = new ApolloServer({ 
 	typeDefs, 
 	resolvers,
+	validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
 	context: ({ req }) => {
 		//헤더에서 사용자 토큰 가져오기
 		const token = req.headers.authorization;
 		//토큰에서 사용자 얻기
 		const user = getUser(token);
-		//콘솔에 user 로깅
-		console.log(user);
-		//context에 db models 추가
+		//context에 db models 및 user 추가
 		return { models , user };
 	}
 });
