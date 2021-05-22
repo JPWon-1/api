@@ -121,3 +121,44 @@ query{
 1) 먼저 그래프QL 스키마를 작성한다
 2) 데이터베이스 모델을 작성한다
 3) 쿼리를 작성하거나 리졸버 코드를 작성한다.
+
+- 2021-05-22 : mongoDB 를 만들고 heroku를 설정 하였다.
+데이터베이스 호스팅 = 몽고 디비
+코드 배포 = heroku
+1) 클러스터 생성
+2) IP주소 허용 => 0.0.0.0/0 으로 하여 모든 IP 주소로 접근 가능하게 하였음
+3) 아이디/비밀번호 설정
+이 설정이 끝나면 애플리케이션을 위해 호스팅된 데이터 저장소를 가지게 된 것이다.
+
+이 책의 학습 목적에 맞게 클라우드 애플리케이션 플랫폼인 히로쿠를 사용하였다.
+히로쿠 계정 생성을 하고 히로쿠 커맨드 라인도구도 인스톨 하였다. (https://oreil.ly/Vf2Q_)
+
+1) 프로젝트 설정
+히로쿠 웹사이트 내에서 new -> create new app 을 한다
+app 이름과 region을 설정한다 . 나는 jseveverywherejp / United States 로 하였다.
+그 다음 settings 에 들어가 Reveal Config Vars ( 설정 변수 표시) 에 들어가 .env 에서 한거와 마찬가지로 아래 설정 변수를 추가한다
+NODE_ENV : production
+JWT_SECRET : PASSPHARSE
+DB_HOST : 아까 만든 디비 호스트 주소
+2) 배포
+터미널에서
+```js
+heroku git:remote -a jseverywherejp
+git add .
+git commit -am "ready!"
+git push heroku master
+```
+를 입력해준다
+3) 테스트
+그래프QL API 요청을 날려 테스트를 해볼것이다.
+터미널 애플리케이션에서 curl을 사용하면 테스트 할 수 있다.
+다음과 같이 입력해보자
+```js
+curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ notes { id } }" }' https://jseverywherejp.herokuapp.com/api
+
+```
+아직 이 프로덕션에 데이터가 포함되지 않았으므로 테스트에 성공하면 빈 노트 배열이 포함된 응답을 받는다.
+```
+{"data":{"notes":[]}}
+```
+
