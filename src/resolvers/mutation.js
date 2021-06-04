@@ -90,14 +90,14 @@ module.exports = {
             throw new Error('Error creating account');
         }
     },
-    signIn: async (parent, { username, email, password }, { models }) => {
+    signIn: async (parent, { email, password }, { models }) => {
         if (email) {
             //이메일 주소 스트링 처리
             email = email.trim().toLowerCase();
         }
 
         const user = await models.User.findOne({
-            $or: [{ email }, { username }]
+            $or: [{ email }]
         });
 
         //사용자를 찾지 못하면 인증 에러 던지기
