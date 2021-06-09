@@ -29,14 +29,22 @@ module.exports = gql`
 		favorites:[Note!]!
 	}
 
+	type History {
+		id: ID!
+		year: String!
+		content: String
+		source: String
+	}
+
 	type Query {
-		hello: String!
 		notes: [Note!]!
 		note(id: ID!): Note!
 		user(username: String!): User
 		users: [User!]!
 		me: User!
 		noteFeed(cursor: String): NoteFeed
+		history: History!
+		histories:[History!]
 	}
 	
 	type Mutation {
@@ -46,5 +54,6 @@ module.exports = gql`
 		signUp(username: String!, email: String!, password: String!):String!
 		signIn(email:String, password: String!): String!
 		toggleFavorite(id: ID!): Note!
+		newHistory(year: String!):History!
 	}
 `;

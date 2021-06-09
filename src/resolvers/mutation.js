@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const gravatar = require('../util/gravatar');
+const models = require('../models');
 
 module.exports = {
     newNote: async (parent, args, { models, user }) => {
@@ -52,7 +53,7 @@ module.exports = {
         //note 소유자와 현재 사용자가 불일치하면 접근 에러 던지기
         if (note && String(note.author) !== user.id) {
             throw new ForbiddenError("게시글의 권한이 없습니다");
-        } 
+        }
         //DB의 노트를 업데이트하고 업데이트된 노트를 반환
         return await models.Note.findOneAndUpdate(
             {
@@ -158,5 +159,14 @@ module.exports = {
             );
         }
     },
+    newHistory: async (parent, {year}, { models }) => {
+        return await models.History.create({
+            year: year,
+            content:"nothing happend",
+            source:"JP"
+        });
+    },
+
+
 
 }

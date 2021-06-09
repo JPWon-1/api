@@ -17,6 +17,13 @@ module.exports = {
         //현재 user context에 맞는 사용자 찾기
         return await models.User.findById(user.id);
     },
+    history: async (parent, args, { models }) => {
+        return await models.History.findById(args.id)
+    },
+    histories: async (parent, args, { models }) => {
+        //현재 user context에 맞는 사용자 찾기
+        return await models.History.find({});
+    },
     noteFeed: async (parent, { cursor }, { models }) => {
         //limit을 10으로 하드코딩
         const limit = 10;
