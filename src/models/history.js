@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const HistorySchema = new mongoose.Schema(
     {
         // _id: mongoose.Schema.ObjectId,
-        year: {
+        date: {
             type: String,
             required: true
         },

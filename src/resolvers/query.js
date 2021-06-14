@@ -17,11 +17,14 @@ module.exports = {
         //현재 user context에 맞는 사용자 찾기
         return await models.User.findById(user.id);
     },
-    history: async (parent, args, { models }) => {
-        return await models.History.findById(args.id)
+    history: async (parent, { date }, { models }) => {
+        //년도별 역사 가져오기
+        return await models.History.find({date:date})
+
+        
     },
     histories: async (parent, args, { models }) => {
-        //현재 user context에 맞는 사용자 찾기
+        //모든 역사 목록 불러오기
         return await models.History.find({});
     },
     noteFeed: async (parent, { cursor }, { models }) => {

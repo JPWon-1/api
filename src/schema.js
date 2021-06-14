@@ -31,7 +31,7 @@ module.exports = gql`
 
 	type History {
 		id: ID!
-		year: String!
+		date: String!
 		content: String
 		source: String
 	}
@@ -43,7 +43,7 @@ module.exports = gql`
 		users: [User!]!
 		me: User!
 		noteFeed(cursor: String): NoteFeed
-		history: History!
+		history(date:String!): [History]
 		histories:[History!]
 	}
 	
@@ -54,6 +54,6 @@ module.exports = gql`
 		signUp(username: String!, email: String!, password: String!):String!
 		signIn(email:String, password: String!): String!
 		toggleFavorite(id: ID!): Note!
-		newHistory(year: String!):History!
+		newHistory(date: String!):History!
 	}
 `;

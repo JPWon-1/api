@@ -159,9 +159,9 @@ module.exports = {
             );
         }
     },
-    newHistory: async (parent, {year}, { models }) => {
+    newHistory: async (parent, {date}, { models }) => {
         return await models.History.create({
-            year: year,
+            date: date,
             content:"nothing happend",
             source:"JP"
         });
